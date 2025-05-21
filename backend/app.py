@@ -20,7 +20,13 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # CORS 설정
-CORS(app)
+CORS(app, resources={
+    r"/*": {
+        "origins": ["*"],
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
 
 # 모델 정의
 class Canvas(db.Model):
@@ -132,17 +138,15 @@ def test():
     return jsonify({"message": "Flask 백엔드에 연결되었습니다!"})
 
 # 정적 파일 서빙을 위한 라우트
+@app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
-def serve_static(path):
+def serve(path):
     if path != "" and os.path.exists(os.path.join(BUILD_DIR, path)):
         return send_from_directory(BUILD_DIR, path)
     else:
         return send_from_directory(BUILD_DIR, 'index.html')
 
-# 루트 경로
-@app.route('/')
-def serve():
-    return send_from_directory(BUILD_DIR, 'index.html')
+# 루트 경로는 serve 함수가 처리하므로 중복 제거
 
 if __name__ == '__main__':
     print(f"Serving files from: {BUILD_DIR}")
