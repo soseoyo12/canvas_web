@@ -1,7 +1,7 @@
 services:
   - type: web
     name: canvas-web-app
-    env: node  # Node.js 환경으로 변경
+    env: node
     buildCommand: |
       chmod +x render-build.sh
       ./render-build.sh
@@ -10,7 +10,16 @@ services:
       - key: NPM_CONFIG_LEGACY_PEER_DEPS
         value: "true"
       - key: NODE_VERSION
-        value: 18.0.0  # 안정적인 LTS 버전 사용
+        value: 18.x
+      - key: NPM_VERSION
+        value: 9.x
       - key: PYTHON_VERSION
         value: 3.9.0
     plan: free
+    buildCommand: |
+      npm install -g npm@9.8.1
+      npm install
+      npm run build
+      cd backend
+      pip install -r requirements.txt
+      cd ..
