@@ -1,9 +1,9 @@
 services:
   - type: web
     name: canvas-web-app
-    env: node
-    buildCommand: npm install && npm run build
-    startCommand: gunicorn backend.app:app
+    env: python
+    buildCommand: chmod +x render-build.sh && ./render-build.sh
+    startCommand: gunicorn backend.app:app --bind 0.0.0.0:$PORT
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.0
