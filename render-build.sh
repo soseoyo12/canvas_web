@@ -1,9 +1,13 @@
 #!/bin/bash
 set -e  # Exit immediately if a command exits with a non-zero status
 
-# Install Node.js dependencies
-echo "Installing Node.js dependencies..."
-npm install
+# Print Node.js and npm versions
+node -v
+npm -v
+
+# Install dependencies with legacy peer deps
+echo "Installing Node.js dependencies with legacy peer deps..."
+npm install --legacy-peer-deps
 
 # Build the React app
 echo "Building React app..."

@@ -1,12 +1,16 @@
 services:
   - type: web
     name: canvas-web-app
-    env: python
-    buildCommand: chmod +x render-build.sh && ./render-build.sh
+    env: node  # Node.js 환경으로 변경
+    buildCommand: |
+      chmod +x render-build.sh
+      ./render-build.sh
     startCommand: gunicorn backend.app:app --bind 0.0.0.0:$PORT
     envVars:
+      - key: NPM_CONFIG_LEGACY_PEER_DEPS
+        value: "true"
+      - key: NODE_VERSION
+        value: 18.0.0  # 안정적인 LTS 버전 사용
       - key: PYTHON_VERSION
         value: 3.9.0
-      - key: NODE_VERSION
-        value: 16.0.0
     plan: free
